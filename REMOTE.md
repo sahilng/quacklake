@@ -20,5 +20,5 @@ call quack_serve('quack:localhost', token:='quacklake');
 
 create table my_ducklake.main.test as select 42 as value;
 
-CALL ducklake_flush_inlined_data('my_ducklake');
+-- CALL ducklake_flush_inlined_data('my_ducklake');
 ```
