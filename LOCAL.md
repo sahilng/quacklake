@@ -6,7 +6,7 @@ duckdb
 
 CREATE SECRET (
     TYPE quack,
-    TOKEN '8C429BEEB58E83ADBD3F575C433650A5',
+    TOKEN 'quacklake',
     SCOPE 'quack:localhost:9494'
 );
 

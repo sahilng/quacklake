@@ -13,12 +13,12 @@ ATTACH 'ducklake:metadata.ducklake'
 INSTALL quack;
 LOAD quack;
 
-call quack_serve('quack:localhost');
+call quack_serve('quack:localhost', token:='quacklake');
+
+--copy token for local
 
 create table my_ducklake.main.test as select 42 as value;
 
 CALL ducklake_flush_inlined_data('my_ducklake');
 
 -- gh cs ports forward 9494:9494
-
-
