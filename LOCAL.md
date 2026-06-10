@@ -1,5 +1,11 @@
 # LOCAL
 
+Forward remote port 9494 to local, for example if the remote is a GitHub Codespace:
+```sh
+gh cs ports forward 9494:9494
+```
+
+Then:
 ```sh
 curl install.duckdb.org | bash
 
