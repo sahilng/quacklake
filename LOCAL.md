@@ -4,6 +4,8 @@ curl install.duckdb.org | bash
 
 duckdb
 
+INSTALL quack; LOAD quack;
+
 CREATE SECRET (
     TYPE quack,
     TOKEN 'quacklake',
