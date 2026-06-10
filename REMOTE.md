@@ -4,7 +4,7 @@ curl install.duckdb.org | bash
 
 duckdb
 
-INSTALL ducklake;
+INSTALL ducklake; LOAD ducklake;
 
 ATTACH 'ducklake:metadata.ducklake'
     AS my_ducklake
