@@ -15,21 +15,21 @@ if [ ! -e .env ]; then cp .env.example .env; fi
 chmod 600 .env
 ```
 
-Edit `.env` and replace the example value with your 64-character lowercase hexadecimal token. Give local clients this same token through a secure channel. `.env` is excluded from Git.
+Edit `.env` and replace the example token with your 64-character lowercase hexadecimal token. The default `CATALOG_SERVER=data/metadata.ducklake` and `DATA_PATH=data/first/` retain the local setup. For a PostgreSQL catalog and S3 data, for example, set `CATALOG_SERVER=postgres:postgresql://user:password@host:5432/lake_catalog` and `DATA_PATH=s3://bucket/prefix/`. The data path must end in `/`. Supply the appropriate PostgreSQL and S3 credentials and network access on the server. For an S3-compatible endpoint outside AWS, configure a [DuckDB S3 secret](https://duckdb.org/docs/2.0/core_extensions/httpfs/s3api) with its endpoint and URL style before the `ATTACH` statement in `init.sql`. Give local clients the same Quack token through a secure channel. `.env` is excluded from Git.
 
 Install DuckDB 2.0.0 and its required extensions, then start the server from the repository directory:
 
 ```sh
 curl -fsSL https://install.duckdb.org | DUCKDB_VERSION=2.0.0 bash
 export PATH="$HOME/.duckdb/cli/2.0.0:$PATH"
-duckdb :memory: -c "INSTALL ducklake; INSTALL httpfs; INSTALL quack;"
+duckdb :memory: -c "INSTALL ducklake; INSTALL httpfs; INSTALL postgres; INSTALL quack;"
 set -a
 . ./.env
 set +a
 python3 server.py
 ```
 
-Leave the process running while connecting from [LOCAL.md](LOCAL.md). [init.sql](init.sql) attaches `my_ducklake`, creates a test table with value `42`, and starts token-authenticated Quack on `127.0.0.1:9494`. `server.py` reads the exported `QUACK_TOKEN` and keeps the DuckDB session alive. The server must be started from this repository directory so the relative paths in `init.sql` resolve to `data/`.
+Leave the process running while connecting from [LOCAL.md](LOCAL.md). [init.sql](init.sql) attaches `my_ducklake` using `CATALOG_SERVER` and `DATA_PATH`, creates a test table with value `42`, and starts token-authenticated Quack on `127.0.0.1:9494`. `server.py` reads the exported `QUACK_TOKEN` and keeps the DuckDB session alive. Start the server from this repository directory when using relative paths.
 
 ## Optional Docker setup
 
@@ -46,7 +46,7 @@ docker run -d --name quacklake --restart unless-stopped \
 docker logs quacklake
 ```
 
-The image pins DuckDB 2.0.0 and installs the extensions. The container runs as your host user so it can write to `data/`. Docker reads `QUACK_TOKEN` from `.env` without copying the file into the image. It uses the same [init.sql](init.sql) and data directory as the direct process. Linux host networking lets Quack bind the host's `127.0.0.1:9494`. Run either the host process or the container at a time because both use port `9494`. Use `docker stop quacklake` and `docker start quacklake` to switch it off and on.
+The image pins DuckDB 2.0.0 and installs the extensions. The container runs as your host user so it can write to `data/`. Docker reads `QUACK_TOKEN`, `CATALOG_SERVER`, and `DATA_PATH` from `.env` without copying the file into the image. The bind mount makes the default `data/` paths available in the container. For custom local paths, mount them at the paths used inside the container; S3 paths require credentials in the container environment. Linux host networking lets Quack bind the host's `127.0.0.1:9494`. Run either the host process or the container at a time because both use port `9494`. Use `docker stop quacklake` and `docker start quacklake` to switch it off and on.
 
 ## GitHub Codespaces option
 

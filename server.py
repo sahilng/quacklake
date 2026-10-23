@@ -10,6 +10,9 @@ token = os.environ.get("QUACK_TOKEN", "")
 if not re.fullmatch(r"[0-9a-f]{64}", token):
     raise ValueError("QUACK_TOKEN must contain 64 lowercase hexadecimal characters")
 
+os.environ["CATALOG_SERVER"] = os.environ.get("CATALOG_SERVER") or "data/metadata.ducklake"
+os.environ["DATA_PATH"] = os.environ.get("DATA_PATH") or "data/first/"
+
 db = subprocess.Popen(
     ["duckdb", ":memory:", "-init", "init.sql", "-bail"],
     stdin=subprocess.PIPE,

@@ -12,7 +12,7 @@ USER quacklake
 ENV HOME=/home/quacklake
 WORKDIR /app
 
-RUN duckdb :memory: -c "INSTALL ducklake; INSTALL httpfs; INSTALL quack;"
+RUN duckdb :memory: -c "INSTALL ducklake; INSTALL httpfs; INSTALL postgres; INSTALL quack;"
 
 COPY server.py /app/server.py
 COPY init.sql /app/init.sql

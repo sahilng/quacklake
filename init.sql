@@ -2,8 +2,8 @@ LOAD ducklake;
 LOAD httpfs;
 LOAD quack;
 
-ATTACH 'ducklake:data/metadata.ducklake' AS my_ducklake
-    (DATA_PATH 'data/first/');
+ATTACH 'ducklake:' || getenv('CATALOG_SERVER') AS my_ducklake
+    (DATA_PATH getenv('DATA_PATH'));
 
 CREATE TABLE IF NOT EXISTS my_ducklake.main.test AS SELECT 42 AS value;
 
