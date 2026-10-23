@@ -26,6 +26,7 @@ Install the same DuckDB version as the remote server and start the CLI:
 
 ```sh
 curl -fsSL https://install.duckdb.org | DUCKDB_VERSION=2.0.0 bash
+~/.duckdb/cli/2.0.0/duckdb :memory: -c "INSTALL quack;"
 ~/.duckdb/cli/2.0.0/duckdb
 ```
 

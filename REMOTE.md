@@ -58,4 +58,4 @@ CODESPACE=your-codespace-name
 gh cs ssh -c "$CODESPACE"
 ```
 
-Inside the Codespace, enter `/workspaces/quacklake` and follow either setup above. Keep Codespace port `9494` private. [LOCAL.md](LOCAL.md) shows the corresponding port forwarding command. GitHub's [private port tunnel](https://docs.github.com/en/codespaces/reference/security-in-github-codespaces) encrypts the connection and requires Codespaces authentication.
+Inside the Codespace, enter `/workspaces/quacklake` and follow either setup above, starting with `.env` and the data directory. Codespaces has already checked out the repository, so the `git clone` step does not apply. Keep Codespace port `9494` private. [LOCAL.md](LOCAL.md) shows the corresponding port forwarding command. GitHub's [private port tunnel](https://docs.github.com/en/codespaces/reference/security-in-github-codespaces) encrypts the connection and requires Codespaces authentication.
