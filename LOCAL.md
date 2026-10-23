@@ -1,21 +1,24 @@
 # Local connection
 
-Complete [REMOTE.md](REMOTE.md) first. Copy the token from the Linux host to your computer. Set `REMOTE` to your SSH destination and `REMOTE_DIR` to the repository's absolute path on that host:
+Complete [REMOTE.md](REMOTE.md) first. Put the same token used by the remote server in this checkout's `.env` file. You can use the token you chose or one provided by the server operator:
+
+```sh
+if [ ! -e .env ]; then cp .env.example .env; fi
+chmod 600 .env
+```
+
+Edit `.env` and replace the example value with the token. Then export it for the DuckDB CLI:
+
+```sh
+set -a
+. ./.env
+set +a
+```
+
+Set `REMOTE` to your SSH destination. In another local terminal, open an SSH tunnel and leave it running:
 
 ```sh
 REMOTE=user@example.com
-REMOTE_DIR=/home/user/quacklake
-mkdir -p "$HOME/.config/quacklake"
-chmod 700 "$HOME/.config/quacklake"
-scp "$REMOTE:$REMOTE_DIR/.secrets/quack_token" "$HOME/.config/quacklake/token"
-chmod 600 "$HOME/.config/quacklake/token"
-IFS= read -r QUACK_TOKEN < "$HOME/.config/quacklake/token"
-export QUACK_TOKEN
-```
-
-In another local terminal, open an SSH tunnel and leave it running:
-
-```sh
 ssh -N -L 127.0.0.1:9494:127.0.0.1:9494 "$REMOTE"
 ```
 
@@ -49,17 +52,9 @@ DISCONNECT;
 
 ## GitHub Codespaces option
 
-For a Codespace, replace the `scp` command above with this command after setting `CODESPACE` to its name:
+For a Codespace, set `CODESPACE` to its name and use this private port forward instead of the SSH tunnel:
 
 ```sh
 CODESPACE=your-codespace-name
-gh cs cp -e -c "$CODESPACE" \
-    remote:/workspaces/quacklake/.secrets/quack_token \
-    "$HOME/.config/quacklake/token"
-```
-
-Keep the `chmod`, `read`, and `export` commands above. Replace the SSH tunnel command with this private Codespaces port forward:
-
-```sh
 gh cs ports forward 9494:9494 -c "$CODESPACE"
 ```

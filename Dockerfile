@@ -10,7 +10,6 @@ COPY --from=duckdb_cli /duckdb /usr/local/bin/duckdb
 
 USER quacklake
 ENV HOME=/home/quacklake
-ENV QUACK_TOKEN_FILE=/run/secrets/quack_token
 WORKDIR /app
 
 RUN duckdb :memory: -c "INSTALL ducklake; INSTALL httpfs; INSTALL quack;"

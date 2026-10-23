@@ -1,3 +1,4 @@
+/.env
 /.secrets/
 /data/
 /data_second/

@@ -4,20 +4,15 @@ import signal
 import socket
 import subprocess
 import time
-from pathlib import Path
 
 
-TOKEN_PATH = Path(os.environ.get("QUACK_TOKEN_FILE", ".secrets/quack_token"))
-token = TOKEN_PATH.read_text().strip()
+token = os.environ.get("QUACK_TOKEN", "")
 if not re.fullmatch(r"[0-9a-f]{64}", token):
-    raise ValueError("quack_token must contain 64 lowercase hexadecimal characters")
+    raise ValueError("QUACK_TOKEN must contain 64 lowercase hexadecimal characters")
 
-environment = os.environ.copy()
-environment["QUACK_TOKEN"] = token
 db = subprocess.Popen(
     ["duckdb", ":memory:", "-init", "init.sql", "-bail"],
     stdin=subprocess.PIPE,
-    env=environment,
 )
 
 for _ in range(120):
